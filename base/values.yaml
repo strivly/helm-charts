@@ -16,15 +16,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-  ## Compatibility adaptations for Kubernetes platforms
-  ##
-  compatibility:
-    ## Compatibility adaptations for Openshift
-    ##
-    openshift:
-      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
-      ##
-      adaptSecurityContext: auto
 
 ## @section Common parameters
 ##
@@ -71,7 +62,7 @@ diagnosticMode:
 ## %%MAIN_CONTAINER/POD_DESCRIPTION%%
 ##
 component:
-  name: clauger3e
+  name: changeme
   ## Bitnami %%MAIN_CONTAINER%% image
   ## ref: https://hub.docker.com/r/bitnami/%%IMAGE_NAME%%/tags/
   ## @param component.name.image.registry [default: REGISTRY_NAME] %%MAIN_CONTAINER%% image registry
@@ -85,7 +76,7 @@ component:
   image:
     registry: changeme
     repository: changeme
-    tag: changeme
+    tag:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -119,7 +110,7 @@ component:
   ## @param component.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: true
+    enabled: false
     httpGet:
       path: /health
       port: http
@@ -136,7 +127,7 @@ component:
   ## @param component.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: true
+    enabled: false
     httpGet:
       path: /health
       port: http
@@ -197,7 +188,7 @@ component:
   ## @param component.podSecurityContext.fsGroup Set fsGroup in %%MAIN_CONTAINER_NAME%% pods' Security Context
   ##
   podSecurityContext:
-    enabled: true
+    enabled: false
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
@@ -215,7 +206,7 @@ component:
   ## @param component.containerSecurityContext.seccompProfile.type Set seccomp profile in %%MAIN_CONTAINER_NAME%% container
   ##
   containerSecurityContext:
-    enabled: true
+    enabled: false
     seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
@@ -299,17 +290,12 @@ component:
   ## @param component.nodeSelector Node labels for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
-  nodeSelector:
-    purpose: spot
+  nodeSelector: {}
 
   ## @param component.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations:
-    - key: instance_type
-      operator: Equal
-      value: spot
-      effect: NoExecute
+  tolerations: []
 
   ## ONLY FOR DEPLOYMENTS:
   ## @param component.updateStrategy.type %%MAIN_CONTAINER_NAME%% deployment strategy type
@@ -431,7 +417,7 @@ component:
 service:
   ## @param service.type %%MAIN_CONTAINER_NAME%% service type
   ##
-  type: LoadBalancer
+  type: ClusterIP
   ## @param service.ports.http %%MAIN_CONTAINER_NAME%% service HTTP port
   ## @param service.ports.https %%MAIN_CONTAINER_NAME%% service HTTPS port
   ##
@@ -489,7 +475,7 @@ service:
 networkPolicy:
   ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: true
+  enabled: false
   ## @param networkPolicy.allowExternal Don't require server label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
   ## server label will have network access to the ports server is listening
@@ -571,11 +557,7 @@ ingress:
   ##   kubernetes.io/ingress.class: nginx
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
-  annotations:
-    alb.ingress.kubernetes.io/group.name: private
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /health
+  annotations: {}
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
@@ -656,7 +638,7 @@ ingress:
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
   ##
-  enabled: true
+  enabled: false
   ## @param persistence.mountPath Path to mount the volume at.
   ##
   mountPath: /bitnami/component/data
@@ -754,7 +736,7 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    enabled: true
+    enabled: false
     seLinuxOptions: {}
     runAsUser: 0
 
@@ -785,7 +767,7 @@ rbac:
 serviceAccount:
   ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
   ##
-  create: true
+  create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##

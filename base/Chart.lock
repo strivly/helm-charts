@@ -1,0 +1,6 @@
+dependencies:
+- name: common
+  repository: oci://registry.digitalocean.com/strivly/helm-charts
+  version: 2.26.1
+digest: sha256:276bceec1028282d95c5810a891e698513ec7994b05188425013e75191a04a5c
+generated: "2025-05-18T22:27:23.199111559+02:00"

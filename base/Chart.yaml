@@ -1,16 +1,18 @@
 apiVersion: v2
 dependencies:
   - name: common
-    repository: oci://.../helm-charts
+    repository: oci://registry.digitalocean.com/strivly/helm-charts
     version: 2.26.1
-description: An Helm Chart that will serve as a flexible dependency for other microservices Helm charts
-home: https://clauger.fr
+description: An Helm Chart that will serve as a flexible dependency for other microservices
+  Helm charts
+home: https://strivly.cloud
 icon: https://assets-global.website-files.com/6400e4a43baf681b1dae893b/6418a7d6df89f559e5ceb842_favicon.png
 keywords:
   - boilerplate
   - base
 maintainers:
-  - name: OmniPlatform
-    url: https://dev.azure.com/clauger3e/OmniPlatform/_git/helm-charts
+  - name: Strivly Cloud
+    url: https://github.com/strivly/helm-charts
 name: base
-version: 0.1.0
+version: 0.1.8
+appVersion: 0.1.0
